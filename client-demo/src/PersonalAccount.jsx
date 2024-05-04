@@ -122,13 +122,13 @@ function PersonalAccount() {
     let color;
     switch (status) {
       case "Ожидает":
-        color = "yellow";
+        color = "#f7ff00";
         break;
       case "Отказана":
         color = "red";
         break;
-      case "Одобрена":
-        color = "green";
+      case "Принята":
+        color = "#53a6a6";
         break;
       default:
         color = "white";
@@ -196,7 +196,7 @@ function PersonalAccount() {
                 </div>
               </div>
               {userRole === "USER" ? (
-                <div style={renderBookStatus(book.book_state)}>
+                <div className="renderBookStatus" style={renderBookStatus(book.book_state)}>
                   <h3>{book.book_state}</h3>
                 </div>
               ) : (
