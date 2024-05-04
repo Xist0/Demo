@@ -133,20 +133,22 @@ function PersonalAccount() {
                         <button onClick={handleSubmit}>Add Book</button>
                     </div>
                 </div>
-                {userBooks.map((book) => (
-                    <div className='container-box' key={book.id}>
-                        <div className='box-img'>
-                            <img src={book.book_img} alt="" />
-                        </div>
-                        <div className="box-title">
-                            <h1>{book.book_name} </h1>
-                            <div className="box-description">
-                                <h2>{book.book_description}</h2>
+                <div className="book_list">
+                    {userBooks.map((book) => (
+                        <div className='container-box' key={book.id}>
+                            <div className='box-img'>
+                                <img src={book.book_img} alt="" />
                             </div>
+                            <div className="box-title">
+                                <h1>{book.book_name} </h1>
+                                <div className="box-description">
+                                    <h2>{book.book_description}</h2>
+                                </div>
+                            </div>
+                            <div style={renderBookStatus(book.book_state)}><h3>{book.book_state}</h3></div>
                         </div>
-                        <div style={renderBookStatus(book.book_state)}><h3>{book.book_state}</h3></div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         </>
     )

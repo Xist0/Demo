@@ -206,3 +206,9 @@
   align-items: center;
   justify-content: center;
 }
+.book_list{
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  margin: 20px 0;
+}
