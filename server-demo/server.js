@@ -53,9 +53,15 @@ app.delete("/books/:id", roleMiddleware(["ADMIN"]), async (req, res) => {
     res.status(500).json({ error: "Error deleting book" });
   }
 });
-app.put("/books/:id/status", roleMiddleware(["ADMIN"]), async (req, res) => {
+app.put("/books/:id/status", async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
+
+  // Проверяем, что значение статуса является допустимым
+  const validStatuses = ["Ожидает", "Принята", "Отказана"];
+  if (!validStatuses.includes(status)) {
+    return res.status(400).json({ error: "Недопустимое значение статуса книги" });
+  }
 
   try {
     const updateResult =
@@ -67,13 +73,13 @@ app.put("/books/:id/status", roleMiddleware(["ADMIN"]), async (req, res) => {
     ) {
       return res
         .status(200)
-        .json({ message: "Book status updated successfully" });
+        .json({ message: "Статус книги успешно обновлен" });
     } else {
-      return res.status(404).json({ error: "Book not found" });
+      return res.status(404).json({ error: "Книга не найдена" });
     }
   } catch (error) {
-    console.error("Error updating book status:", error);
-    res.status(500).json({ error: "Error updating book status" });
+    console.error("Ошибка при обновлении статуса книги:", error);
+    res.status(500).json({ error: "Ошибка при обновлении статуса книги" });
   }
 });
 

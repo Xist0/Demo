@@ -7,7 +7,11 @@ function ListBook() {
     useEffect(() => {
         fetch('http://localhost:5000/books')
             .then(response => response.json())
-            .then(data => setBooks(data))
+            .then(data => {
+                // Фильтруем книги по статусу "Принята"
+                const acceptedBooks = data.filter(book => book.book_state === 'Принята');
+                setBooks(acceptedBooks);
+            })
             .catch(error => console.error('Ошибка при получении списка книг:', error));
     }, []);
 

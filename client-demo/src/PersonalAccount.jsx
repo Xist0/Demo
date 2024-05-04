@@ -21,7 +21,13 @@ function PersonalAccount() {
   useEffect(() => {
     const fetchUserBooks = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/books`, {
+        let url = "http://localhost:5000/books";
+        // Если роль администратора, фильтруем по статусу "Ожидает"
+        if (userRole === "ADMIN") {
+          url += "?status=Ожидает";
+        }
+
+        const response = await fetch(url, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -30,16 +36,13 @@ function PersonalAccount() {
           throw new Error("Failed to fetch user books");
         }
         const data = await response.json();
-        const filteredBooks = data.filter(
-          (book) => book.book_avtor === userName
-        );
-        setUserBooks(filteredBooks);
+        setUserBooks(data);
       } catch (error) {
         console.error("Error fetching user books:", error);
       }
     };
     fetchUserBooks();
-  }, [userName, token]);
+  }, [userName, userRole, token]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -59,6 +62,11 @@ function PersonalAccount() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
+      const validStatuses = ["Ожидает", "Принята", "Отказана"];
+      if (!validStatuses.includes(newStatus)) {
+        throw new Error("Недопустимое значение статуса книги");
+      }
+
       const response = await fetch(`http://localhost:5000/books/${id}/status`, {
         method: "PUT",
         headers: {
@@ -70,6 +78,8 @@ function PersonalAccount() {
       if (!response.ok) {
         throw new Error("Failed to update book status");
       }
+      
+      // Получаем обновленные данные после изменения статуса
       const updatedBooks = userBooks.map((book) => {
         if (book.id === id) {
           return { ...book, book_state: newStatus };
@@ -78,7 +88,7 @@ function PersonalAccount() {
       });
       setUserBooks(updatedBooks);
     } catch (error) {
-      console.error("Error updating book status:", error);
+      console.error("Error updating book status:", error.message);
     }
   };
 
@@ -192,7 +202,7 @@ function PersonalAccount() {
               ) : (
                 <div className="admin-buttons">
                   <button
-                    onClick={() => handleStatusChange(book.id, "Одобрена")}
+                    onClick={() => handleStatusChange(book.id, "Принята")}
                   >
                     Принять
                   </button>
