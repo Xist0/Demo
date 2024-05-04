@@ -1,9 +1,9 @@
-import postgres from 'postgres'
+import postgres from "postgres";
 
 export const sql = postgres({
-    host: 'localhost',
-    port: 5433,
-    db: 'demo',
-    username: 'postgres',
-    password: '1234'
-})
+  host: "localhost",
+  port: 5432,
+  db: "postgres",
+  username: "postgres",
+  password: "9669",
+});
