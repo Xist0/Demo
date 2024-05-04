@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigate from './components/Navigate';
 import { useSelector, useDispatch } from 'react-redux';
 import { logOut } from './components/redux/authSlice';
@@ -10,6 +10,7 @@ function PersonalAccount() {
     const userName = useSelector(state => state.auth.name);
     const userRole = useSelector(state => state.auth.role);
     const token = useSelector(state => state.auth.token);
+    const [userBooks, setUserBooks] = useState([]);
 
     const [bookData, setBookData] = useState({
         bookName: '',
@@ -18,6 +19,26 @@ function PersonalAccount() {
         bookFile: '',
     });
 
+    useEffect(() => {
+        const fetchUserBooks = async () => {
+            try {
+                const response = await fetch(`http://localhost:5000/books?bookAvtor=${userName}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user books');
+                }
+                const data = await response.json();
+                setUserBooks(data);
+            } catch (error) {
+                console.error('Error fetching user books:', error);
+            }
+        };
+
+        fetchUserBooks();
+    }, [userName, token]);
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setBookData({
@@ -60,6 +81,26 @@ function PersonalAccount() {
         }
     };
 
+    const renderBookStatus = (status) => {
+        let color;
+        switch (status) {
+            case 'Ожидает':
+                color = 'yellow';
+                break;
+            case 'Отказана':
+                color = 'red';
+                break;
+            case 'Одобрена':
+                color = 'green';
+                break;
+            default:
+                color = 'white';
+        }
+        return {
+            backgroundColor: color
+        };
+    };
+
     return (
         <>
             <Navigate />
@@ -92,6 +133,20 @@ function PersonalAccount() {
                         <button onClick={handleSubmit}>Add Book</button>
                     </div>
                 </div>
+                {userBooks.map((book) => (
+                    <div className='container-box' key={book.id}>
+                        <div className='box-img'>
+                            <img src={book.book_img} alt="" />
+                        </div>
+                        <div className="box-title">
+                            <h1>{book.book_name} </h1>
+                            <div className="box-description">
+                                <h2>{book.book_description}</h2>
+                            </div>
+                        </div>
+                        <div style={renderBookStatus(book.book_state)}><h3>{book.book_state}</h3></div>
+                    </div>
+                ))}
             </div>
         </>
     )
