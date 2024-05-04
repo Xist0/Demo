@@ -22,7 +22,7 @@ function PersonalAccount() {
     useEffect(() => {
         const fetchUserBooks = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/books?bookAvtor=${userName}`, {
+                const response = await fetch(`http://localhost:5000/books`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -31,14 +31,15 @@ function PersonalAccount() {
                     throw new Error('Failed to fetch user books');
                 }
                 const data = await response.json();
-                setUserBooks(data);
+                const filteredBooks = data.filter(book => book.book_avtor === userName);
+                setUserBooks(filteredBooks);
             } catch (error) {
                 console.error('Error fetching user books:', error);
             }
         };
-
         fetchUserBooks();
     }, [userName, token]);
+    
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setBookData({
@@ -71,7 +72,7 @@ function PersonalAccount() {
                 bookDescription: bookData.bookDescription,
                 bookImg: bookData.bookImg ? `/src/img/${bookData.bookImg.name}` : '',
                 bookFile: bookData.bookFile ? `/pdf/${bookData.bookFile.name}` : '',
-                bookAvtor: userName // Добавляем имя пользователя в объект formData
+                bookAvtor: userName 
             };
 
             const response = await addBook(formData, token);
