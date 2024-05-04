@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a {
+  font-family: "Montserrat Alternates", sans-serif;
+  text-decoration: none;
+}
+
+input {
+  border: 1px solid #53a6a6;
+  border-radius: 6px;
+  width: 300px;
+  box-shadow: 0 0 4px 4px rgba(83, 166, 166, 0.25);
+  padding: 15px 10px;
+  align-items: center;
+  display: flex;
+}
+
+input:checked {
+  border: 1px solid #53a6a6;
+}
+
+textarea {
+  border: 1px solid #53a6a6;
+  border-radius: 6px;
+  width: 300px;
+  padding: 10px;
+  box-shadow: 0 0 4px 4px rgba(83, 166, 166, 0.25);
+}
+
+button {
+  border-radius: 6px;
+  background: #53a6a6;
+  color: #fff;
+  font-weight: 800;
+  font-family: "Montserrat Alternates", sans-serif;
+  font-size: 22px;
+  padding: 15px 20px;
+  text-transform: uppercase;
+  text-align: center;
+  width: 320px;
+  transform: scale(1);
+  transition: 0.5s;
+  border: transparent;
+  cursor: pointer;
+}
+
+button:hover {
+  box-shadow: 0 0 4px 4px rgba(83, 166, 166, 0.25);
+  transform: scale(1.1);
+  transition: 0.3s;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
